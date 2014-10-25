@@ -35,7 +35,7 @@ bool IsPermutation(int x, int y) {
 	return true;
 }
 
-bool ArePermutations(int x, int y, int z) {
+bool ArePrimePermutations(int x, int y, int z) {
 	// Property of being a permutation is transitive, so no need to check x vs z.
 	return IsPrime(x) && IsPrime(y) && IsPrime(z) 
 			&& IsPermutation(x, y) && IsPermutation(y, z);
@@ -47,7 +47,7 @@ int main() {
 			int x = i;
 			int y = x + diff;
 			int z = y + diff;
-			if (ArePermutations(x, y, z)) {
+			if (ArePrimePermutations(x, y, z)) {
 				std::cout << x << y << z << std::endl;
 			}
 		}
