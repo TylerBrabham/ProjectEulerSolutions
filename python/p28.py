@@ -6,6 +6,7 @@ def p28():
 	i = 500
 	j = 500
 
+	# new, down, left, up, right
 	next_move = {'n': 'd', 'd': 'l', 'l': 'u', 'u': 'r', 'r': 'n'}
 
 	# variables to keep track of position and value to add at each step.
@@ -16,8 +17,8 @@ def p28():
 	while in_bounds(i, j):
 		move = next_move[move]
 
-		# Don't add anything, just move right one step.
 		if move == 'n':
+			# Don't add anything, just move right one step.
 			j += 1
 			main_step_size += 2
 			value += 1
