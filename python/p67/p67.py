@@ -14,7 +14,6 @@ def p67():
 	best_values = [triangle[0][0]]
 
 	for row in triangle[1:]:
-		# print best_values
 		new_best_values = []
 		for (i, value) in enumerate(row):
 			if i == 0:
