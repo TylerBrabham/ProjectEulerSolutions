@@ -37,10 +37,6 @@ def p81():
 		j = start_column
 
 		while j >= 1 and i <= 80:
-
-			# print i, j
-			# This doesn't handle the edge cases where the indices will be out of 
-			# bounds
 			A[i][j] = min(A[i - 1][j], A[i][j - 1]) + matrix[i - 1][j - 1]
 
 			j -= 1
