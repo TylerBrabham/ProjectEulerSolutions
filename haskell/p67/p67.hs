@@ -1,12 +1,14 @@
 import Data.Char
 import Data.List
 
+-- Stuff for reading input
 convertStr x = read x :: Int
 
 toIntList xs = map convertStr xs
 
 splitContents contents = map words (lines contents)
 
+-- Stuff for actually updating the maximum path
 updateMaxPathRow _ [] c = c
 updateMaxPathRow [] _ c = c
 updateMaxPathRow a b c = updateMaxPathRow (tail a) (tail b) (c ++ [d])
