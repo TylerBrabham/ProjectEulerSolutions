@@ -44,5 +44,15 @@ def p81():
 
 	return A[80][80]
 
+def p81_recursive(matrix, i, j):
+	if i == 0 and j == 0:
+		return matrix[i][j]
+	elif i == 0:
+		return p81_recursive(matrix, i, j - 1) + matrix[i][j]
+	elif j == 0:
+		return p81_recursive(matrix, i - 1, j) + matrix[i][j]
+	else:
+		return min(p81_recursive(matrix, i - 1, j), p81_recursive(matrix, i, j - 1)) + matrix[i][j]
+
 if __name__ == "__main__":
-	print p81()
+	print p81_recursive(read_matrix(), 4, 79)

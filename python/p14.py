@@ -1,3 +1,7 @@
+from time import time
+
+start = time()
+
 collatz_count = {1:0}
 
 max_value = 0
@@ -25,3 +29,4 @@ for i in range(2, 1000000):
 
 
 print max_key
+print time() - start
