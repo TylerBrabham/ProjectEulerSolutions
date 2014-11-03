@@ -20,8 +20,7 @@ p67 [] maxPathRow = maximum maxPathRow
 p67 (x : xs) maxPathRow = p67 xs (updateMaxPathRow maxPathRow ys newMaxRow)
   where
     newMaxRow = [head maxPathRow + y]
-    ys = tail x
-    y = head x
+    (y : ys) = x
 
 main = do  
   contents <- readFile "p67.txt"
