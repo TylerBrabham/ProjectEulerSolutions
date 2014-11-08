@@ -18,6 +18,7 @@ CalculateP1.
         DIVIDE Num BY 5 GIVING Unused REMAINDER LeftOver5
         IF LeftOver3 IS EQUAL TO 0 OR LeftOver5 IS EQUAL TO 0 THEN
             ADD Num TO Result GIVING Result
+        END-IF
     END-PERFORM
     DISPLAY Result.
     STOP RUN.
