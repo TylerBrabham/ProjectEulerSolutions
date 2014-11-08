@@ -20,13 +20,15 @@ CalculateP2.
     SET B TO 1
     SET A TO 0
     PERFORM WITH TEST BEFORE UNTIL Yesir
-        SET Temp TO B
-        ADD B TO A GIVING B
-        SET A TO Temp
         DIVIDE B BY 2 GIVING Unused REMAINDER LeftOver2
         IF LeftOver2 IS EQUAL TO 0 THEN
             ADD B TO Result GIVING Result
         END-IF
+
+        SET Temp TO B
+        ADD B TO A GIVING B
+        SET A TO Temp
+        
         IF B > 4000000 THEN
             SET Yesir TO TRUE
         END-IF
