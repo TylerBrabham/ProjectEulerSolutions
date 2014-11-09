@@ -35,9 +35,16 @@ p81' matrix i j
       b = p81' matrix (i - 1) j
       c = matrix!(i, j)
 
+{-
+  Compute the first half of the matrix by going over one diagonal using the 
+  result from the previous diagonal.
+-}
+p81'' matrix [] curRow
+p81'' matrix prevRow curRow
+
 main = do  
   contents <- readFile "test.txt"
   let m = map toIntList (splitContents contents)
       indices = [(i, j) | i <- [0..4], j <- [0..4]]
       m' = zip indices (concat m)
-  print $ p81' (array ((0, 0), (4, 4)) m') 4 4
+  print $ p81'' (array ((0, 0), (4, 4)) m') 4 4
