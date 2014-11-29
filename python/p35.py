@@ -1,8 +1,9 @@
 def circular_permutations(xs):
   x = str(xs)
   permutations = []
-  for i in range(len(x)):
-    permutations.append(x[(i + 1):] + x[0:i + 1])
+  if not ('2' in x or '5' in x or '0' in x or '4' in x or '6' in x or '8' in x):
+    for i in range(len(x)):
+      permutations.append(x[(i + 1):] + x[0:i + 1])
 
   return map(int, permutations)
 
@@ -36,6 +37,7 @@ def p35():
 
   circular_primes = 0
   for perms in all_perms:
+    all 
     for perm in perms:
       if perm in primes_set:
         continue
