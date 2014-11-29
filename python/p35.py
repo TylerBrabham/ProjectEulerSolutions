@@ -34,8 +34,6 @@ def p35():
 
   all_perms = filter(lambda xs: xs != [], map(circular_permutations, ps))
 
-  # print all_perms
-
   circular_primes = 0
   for perms in all_perms:
     for perm in perms:
