@@ -1,10 +1,9 @@
 def circular_permutations(xs):
   x = str(xs)
   permutations = []
-  if not ('2' in x or '5' in x or '0' in x or '4' in x or '6' in x or '8' in x):
+  if xs < 8 or (not ('2' in x or '5' in x or '0' in x or '4' in x or '6' in x or '8' in x)):
     for i in range(len(x)):
       permutations.append(x[(i + 1):] + x[0:i + 1])
-
   return map(int, permutations)
 
 def sieve(xs):
@@ -33,11 +32,12 @@ def p35():
   for p in ps:
     primes_set[p] = True
 
-  all_perms = map(circular_permutations, ps)
+  all_perms = filter(lambda xs: xs != [], map(circular_permutations, ps))
+
+  # print all_perms
 
   circular_primes = 0
   for perms in all_perms:
-    all 
     for perm in perms:
       if perm in primes_set:
         continue
