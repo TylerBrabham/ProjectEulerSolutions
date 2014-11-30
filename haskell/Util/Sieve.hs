@@ -1,9 +1,10 @@
 module Util.Sieve
 ( allPrimes
-, allPrimesWithMap
+, allPrimesWithIntMap
 ) where
 
-import Data.Array
+import Data.Array.IO
+import qualified Data.IntMap.Strict as Strict
 import qualified Data.Map as Map
 
 allPrimesHelper :: [Int] -> [Int]
@@ -15,21 +16,19 @@ allPrimes :: Int -> [Int]
 allPrimes n = allPrimesHelper [2..(n - 1)]
 
 -- Use strict evaluation $!, or else there is a stack overflow. 
-deleteAll [] m = m
-deleteAll (x : xs) m = deleteAll xs $! (Map.delete x m)
+deleteAllIntMap [] m = m
+deleteAllIntMap (x : xs) m = deleteAllIntMap xs $! (Strict.delete x m)
 
-sieveMapHelper m p n
+sieveIntMapHelper m p n
   | p > (n - 1) = m
-  | not (Map.member p m) = sieveMapHelper m (p + 1) n
-  | otherwise = sieveMapHelper m' (p + 1) n
+  | not (Strict.findWithDefault False p m) = sieveIntMapHelper m (p + 1) n
+  | otherwise = sieveIntMapHelper m' (p + 1) n
       where k = [j * p | j <- [2..(div n p)]]
-            m' = deleteAll k m
+            m' = deleteAllIntMap k m
 
--- Use plus 2 because the primes start from 2.
-sieveMap m = sieveMapHelper m 2 (Map.size m + 2)
+sieveIntMap m = sieveIntMapHelper m 2 (Strict.size m + 2)
 
--- Return all primes strictly less than n, in a Data.Map.Map. 
-allPrimesWithMap :: Int -> ([Int], Map.Map Int Int)
-allPrimesWithMap n = (map fst (Map.toList p), p)
-  where m = Map.fromList $! [(i, i) | i <- [2..(n-1)]]
-        p = sieveMap m
+-- allPrimesWithIntMap :: Int -> [Int]
+allPrimesWithIntMap n = (map fst (Strict.toList p), p)
+  where m = Strict.fromList $! [(i, True) | i <- [2..(n-1)]]
+        p = sieveIntMap m

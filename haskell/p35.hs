@@ -1,6 +1,6 @@
 import Util.Cast
 import Util.Sieve
-import qualified Data.Map as Map
+import qualified Data.IntMap.Strict as Strict
 
 circularPermutations :: Int -> [Int]
 circularPermutations x = ints
@@ -13,8 +13,8 @@ circularPermutations x = ints
 
 p35 :: Int
 p35 = length x
-  where (primes, pmap) = allPrimesWithMap 1000000
-        x = filter (\x -> (all (\k -> Map.member k pmap) (circularPermutations x))) primes
+  where (primes, pmap) = allPrimesWithIntMap 1000000
+        x = filter (\x -> (all (\k -> Strict.findWithDefault False k pmap) (circularPermutations x))) primes
 
 main = do
   print p35
