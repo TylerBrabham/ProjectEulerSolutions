@@ -26,7 +26,7 @@ def better_algorithm(primes):
     preprocessed_sums[i] = preprocessed_sums[i - 1] + primes[i] 
 
   # This works but is not mathematically sound.
-  longest_sum = len(primes) / 50
+  longest_sum = len(primes)
   best_prime = None
   while not best_prime:
     longest_sum -= 1
@@ -39,11 +39,13 @@ def better_algorithm(primes):
         best_prime = val
         break
 
+  print longest_sum
+
   return best_prime
 
 def p50():
   primes = sieve.primes(1000000)
-
+  print primes[-10:]
   return better_algorithm(primes)
 
 if __name__ == "__main__":
