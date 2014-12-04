@@ -1,3 +1,13 @@
+import numpy as np
+import math
+
+'''
+TODO:
+  - Can try hashing points so that we don't waste time on the same set of 
+    points.
+'''
+
+visited_hulls = set([])
 
 def triangle_area(x, y, z):
   # Compute area of given triangle in cartesian coord. Use this function 
@@ -15,12 +25,33 @@ class Hull(object):
     else:
       self.area = self.compute_area()
 
+  def __str__(self):
+    return str(self.points) + ", " + str(self.area)
+
   def extend_hull(self, new_point):
     # Create a new hull object formed by adding this new point.
-    pass
+    # new_points = self.points
+    # while new_points < 
+
+    new_hull = Hull(self.points + [new_point])
+    new_hull.area = self.add_area(new_point)
+    return new_hull
+
+  def add_area(self, new_point):
+    if len(self.points) < 2:
+      return 0
+    else:
+      a = self.points[-1]
+      b = self.points[0]
+      c = new_point
+
+      vec1 = a - b
+      vec2 = c - b
+      # print vec1, vec2
+      return np.linalg.norm(np.cross(vec1, vec2)) / 2
 
   def compute_area(self):
-    pass
+    return 0
 
 def calculate_t_values(xs):
   n = len(xs)
@@ -35,58 +66,85 @@ def calculate_t_values(xs):
 
   return t_values[1:]
 
-def can_use_point(current_hull, potential_interior_point):
+def can_use_point(current_hull, y):
   '''In order to be able to use a new point, it has to be gift-wrappable, and it
   cannot be inside the current hull.
   '''
-  # Things on boundary don't count. May not be true actually. Need to check.
+  # This can be done in constant time
+  for t in current_hull.points:
+    if not (t - y).any():
+      return False
 
-  # Use last two points to determine if it is wrappable. Use last point and 
-  # first point to determine if it is inside the interior or not. 
+  if len(current_hull.points) < 3:
+    return True
 
   # We use current line to indicate what the orientation is.
-  (x1, y1) = current_hull.points[-2]
-  (x2, y2) = current_hull.points[-1]
-  (x3, y3) = current_hull.points[0]
-  (a, b) = potential_interior_point
+  u, v = current_hull.points[-2], current_hull.points[-1]
+  w, x = current_hull.points[0], current_hull.points[1]
 
-  # Check if gift wrappable.
-  if x1 == x2:
-    if y1 < y2:
-      return b > x1
-    else:
-      return b < x1
+  a = (v - u) / np.linalg.norm(v - u)
+  b = (w - v) / np.linalg.norm(w - v)
+  c = (y - v) / np.linalg.norm(y - v)
 
-def gift_wrapping(xy_points):
+  # print a, b
+  # print current_hull.points
+  # print math.sqrt(np.linalg.norm(v - u))
+  # print np.dot(a, b.T), np.dot(c, b.T)
+  border_angle = math.acos(np.dot(a, b.T)[0, 0])
+  new_angle = math.acos(np.dot(c, b.T)[0, 0])
+  if not (border_angle > new_angle > 0):
+    return False
+
+  a = (w - x) / np.linalg.norm(w - x)
+  b = (v - w) / np.linalg.norm(v - w)
+  c = (y - w) / np.linalg.norm(y - w)
+  border_angle = math.acos(np.dot(a, b.T))
+  new_angle = math.acos(np.dot(c, b.T))
+  if not (border_angle > new_angle > 0):
+    return False
+
+  return True
+
+def gift_wrapping(points):
   '''Use gift wrapping algorithm for computing a convex hull in order to find 
   the hull with the best area.
   '''
   # use in_hull for early failure
-  hull_stack = map(lambda x: Hull([x], 0), xy_points)
+  hull_stack = map(lambda x: Hull([x], 0), points)
 
   best_hull = None
   best_area = 0
-  while queue:
-    current_hull = queue.pop()
+  while hull_stack:
+    current_hull = hull_stack.pop()
+    visited_hulls.union(set([current_hull]))
     
     # Only update best hull if we have at least 3 points.
     if len(current_hull.points) > 2:
       if current_hull.area > best_area:
         best_hull = current_hull
+        best_area = current_hull.area
 
     # Update stack by finding new potential points.
-
-    new_points = filter(lambda x: can_use_point(current_hull, x), xy_points)
-
-    new_hulls = map(lambda x: current_hull.extend_hull(x), new_points)
+    new_points = filter(lambda x: can_use_point(current_hull, x), points)
+    potential_hulls = map(lambda x: current_hull.extend_hull(x), new_points)
+    new_hulls = filter(lambda x: not x in visited_hulls, potential_hulls)
+    hull_stack.extend(new_hulls)
 
   return best_hull
 
+def in_range(p):
+  return (1000 > p[0] > -700) and (150 > p[1] > -1000)
+
 def p252(n):
   all_points = calculate_t_values(range(2 * n + 1))
-  xy_points = zip(all_points[0::2], all_points[1::2])
 
-  print xy_points
+  zipped_points = zip(all_points[0::2], all_points[1::2])
+  zipped_points = filter(in_range, zipped_points)
+  points = np.matrix(zipped_points)
+
+  print points
+
+  return gift_wrapping(points)
 
 if __name__ == "__main__":
   print p252(20)
