@@ -75,8 +75,18 @@ def can_use_point(current_hull, y):
     if not (t - y).any():
       return False
 
-  if len(current_hull.points) < 3:
+  if len(current_hull.points) < 2:
     return True
+
+  if len(current_hull.points) == 2:
+    # make sure new point is clockwise
+    u, v = current_hull.points[0], current_hull.points[1]
+
+    a = (u - v) / np.linalg.norm(u - v)
+    b = (y - v) / np.linalg.norm(y - v)
+
+    cross_prod = np.cross(b, a)
+    return cross_prod[0] > 0
 
   # We use current line to indicate what the orientation is.
   u, v = current_hull.points[-2], current_hull.points[-1]
