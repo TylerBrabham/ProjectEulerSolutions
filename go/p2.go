@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func main() {
+func f() {
   i := 0
   j := 1
   x := 0
@@ -16,4 +16,8 @@ func main() {
   }
 
   fmt.Println(x)
+}
+
+func main() {
+  f()
 }
