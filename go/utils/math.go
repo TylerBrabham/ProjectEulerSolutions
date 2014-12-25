@@ -1,5 +1,9 @@
 package utils
 
+import (
+  "fmt"
+)
+
 // Return an array of all primes less than the given parameter.
 func Sieve(n int) []int {
   xs := make([]bool, n)

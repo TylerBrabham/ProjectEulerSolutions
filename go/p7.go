@@ -7,6 +7,6 @@ import (
 )
 
 func main() {
-  primes := utils.Sieve(10000000)
-  fmt.Println(primes[len(primes) - 1])
+  primes := utils.Sieve(1000000)
+  fmt.Println(primes[10000])
 }
